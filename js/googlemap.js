@@ -77,7 +77,7 @@ if (this.containerDiv.style.display !== display) {
 }
 }
 	// ajax code
-	
+	  ajaxresponse  = [ [-33.866,151.196, 120] , [-33.866,150.196, 10], [-33.866,152.196, 85] ]
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
