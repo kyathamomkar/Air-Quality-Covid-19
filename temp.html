@@ -30,7 +30,7 @@
         left: 0;
         transform: translate(-50%, -100%);
         /* Style the bubble. */
-        background-color: white;
+        
         padding: 5px;
         border-radius: 5px;
         font-family: sans-serif;
@@ -62,7 +62,7 @@
         /* The tip is 8px high, and 12px wide. */
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
-        border-top: 8px solid white;
+      		  border-top: 8px solid black;
       }
 
       /* JavaScript will position this div at the bottom of the popup tip. */
@@ -73,6 +73,19 @@
         /* The max width of the info window. */
         width: 200px;
       }
+		
+		.goodhealth{
+			background-color: greenyellow;
+		}
+		.badhealth{
+			background-color: red;
+		}
+		.normalhealth{
+			background-color: orange;
+		}
+		
+		 
+		
     </style>
     <script>
       "use strict";
@@ -97,11 +110,21 @@
             super();
             this.position = position;
             content.classList.add("popup-bubble"); // This zero-height div is positioned at the bottom of the bubble.
-
+			
+			  if( clndiv.innerHTML >100)
+			  content.classList.add("badhealth");  
+			  if( clndiv.innerHTML >70 && clndiv.innerHTML <100)
+			  content.classList.add("normalhealth");  
+			  if( clndiv.innerHTML <40 )
+			  content.classList.add("goodhealth"); 
+			  
+			  
             const bubbleAnchor = document.createElement("div");
             bubbleAnchor.classList.add("popup-bubble-anchor");
+			 
             bubbleAnchor.appendChild(content); // This zero-height div is positioned at the bottom of the tip.
-
+			  
+			  
             this.containerDiv = document.createElement("div");
             this.containerDiv.classList.add("popup-container");
             this.containerDiv.appendChild(bubbleAnchor); // Optionally stop clicks, etc., from bubbling up to the map.
@@ -142,16 +165,17 @@
             }
           }
         }
- 
+ var ajaxresponse= [ [-33.866,151.196, 120] , [-33.866,150.196, 10], [-33.866,152.196, 85] ]
 		  var maindiv = document.getElementById("content");
 
-		   for(var i=1;i<5;i++){ 
+		   for(var i=0;i<ajaxresponse.length;i++){ 
 			    var clndiv = maindiv.cloneNode(true);
 			    clndiv.setAttribute("Id","content"+i);
-			     clndiv.innerHTML = i;
+			     clndiv.innerHTML = ajaxresponse[i][2];
+			
 			   document.getElementById("content").appendChild(clndiv);
         popup = new Popup(
-          new google.maps.LatLng(-33.866, 151.196-i/10),
+          new google.maps.LatLng(ajaxresponse[i][0], ajaxresponse[i][1]),
           clndiv
         );
 		  
@@ -165,7 +189,7 @@
   <body>
     <div id="map"></div>
     <div id="content">
-      Hello world!
+       
     </div>
 	 
   </body>

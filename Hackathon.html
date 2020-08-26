@@ -7,10 +7,18 @@
     <!-- Bootstrap --> 
     <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
 	<link  rel="stylesheet"  href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"  />
+	<link  rel="stylesheet"  href="css/googlemap.css"  />
 	 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 	<script src="js/myscript.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+
 	
-	 
+	 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+	<script src="js/googlemap.js"></script>
   <style>
 	html
 	  {
@@ -113,10 +121,12 @@
 			  <script>
 			  function generatemap(pollutant)
 				  {
-					  if(pollutant=='usepa-aqi')
+					var selectedDropdown =  document.getElementById("inlineFormCustomSelect").value ;
+					  
+					  if(pollutant=='usepa-aqi' )
 						  {
-							 
-							  
+							if(selectedDropdown== 2020)
+							 {
 							  document.getElementById('mapdiv1').style.height="500px";
 							  document.getElementById('mapdiv1').style.opacity="1";
 							  
@@ -127,11 +137,15 @@
 									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
 							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
 								  }
+						  
+							 }
+							 
 						  }
 					  if(pollutant=='usepa-pm25')
 						  {
-							  
-							//document.getElementById('').style.color= "white";   
+						if(selectedDropdown== 2020)
+							 {	  
+							   
 							  document.getElementById('mapdiv2').style.height="500px";
 							  document.getElementById('mapdiv2').style.opacity="1";
 							  
@@ -142,11 +156,12 @@
 							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
 								  }
 							    
-						  }
+						  } }
 					    if(pollutant=='usepa-10')
 						  {
 							  
-							  
+							if(selectedDropdown== 2020)
+							 {  
 							  document.getElementById('mapdiv3').style.height="500px";
 							  document.getElementById('mapdiv3').style.opacity="1";
 							  
@@ -157,11 +172,12 @@
 									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
 							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
 								  }
-						  }
+						  } }
 					  if(pollutant=='usepa-o3')
 						  {
 							  
-							  
+							if(selectedDropdown== 2020)
+							 {  
 							  document.getElementById('mapdiv4').style.height="500px";
 							  document.getElementById('mapdiv4').style.opacity="1";
 							  
@@ -173,11 +189,12 @@
 								  }
 							    
 						  }
-					  
+						  }
 					    if(pollutant=='usepa-no2')
 						  {
 							  
-							  
+							if(selectedDropdown== 2020)
+							 {  
 							  document.getElementById('mapdiv5').style.height="500px";
 							  document.getElementById('mapdiv5').style.opacity="1";
 							  
@@ -187,11 +204,12 @@
 									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
 							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
 								  }
-							    
+							 }
 						  }
 					    if(pollutant=='usepa-so2')
 						  {
-							  
+							if(selectedDropdown== 2020)
+							 {  
 							  
 							  document.getElementById('mapdiv6').style.height="500px";
 							  document.getElementById('mapdiv6').style.opacity="1";
@@ -203,10 +221,11 @@
 									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
 							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
 								  }
-						  }
+						  } }
 					  if(pollutant=='usepa-co')
 						  {
-							  
+							if(selectedDropdown== 2020)
+							 {  
 							  
 							  document.getElementById('mapdiv7').style.height="500px";
 							  document.getElementById('mapdiv7').style.opacity="1";
@@ -218,7 +237,7 @@
 							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
 								  }
 							    
-						  }
+						  } }
 				  }
 			 
 			  
@@ -263,9 +282,11 @@
               
 				<div  id="map7"  style="height:500px;" class="embed-responsive-item"></div> </div> 
 			   
-			  <div id="d3mapdiv" class="embed-responsive embed-responsive-16by9"  >
+			  <div id="mapdiv8" class="embed-responsive embed-responsive-16by9"  style="height: 0px; opacity: 0">
               
-				<div  id="map8"  style="height:500px;" class="embed-responsive-item"></div> </div>
+				<div  id="map8"  style="height:500px;" class="embed-responsive-item"></div>
+			   <div id="content"> </div>
+			  </div>
 			  
 <link  rel="stylesheet"  href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"  />  
 <script  src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>  
@@ -281,8 +302,8 @@
       var  WAQI_ATTR  =  '';  
       var  waqiLayer  =  L.tileLayer(WAQI_URL,  {attribution:  WAQI_ATTR});  
   	  var mapid = 'map'+i;
-      var  map  =  L.map(mapid).setView([40.7128, -74.0060],  8);  
-      map.addLayer(osmLayer).addLayer(waqiLayer); }  
+      var  lmap  =  L.map(mapid).setView([40.7128, -74.0060],  8);  
+      lmap.addLayer(osmLayer).addLayer(waqiLayer); }  
 </script> 
 	 
 			  
