@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+	<meta name="Description" CONTENT="omkarkyatham omkar kyatham covid19 project">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AWS DevPost Hackathon</title>
+    <!-- Bootstrap --> 
+    <link href="static/css/bootstrap-4.4.1.css" rel="stylesheet">
+	<link  rel="stylesheet"  href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"  />
+	<link  rel="stylesheet"  href="static/css/googlemap.css"/>
+	 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+	<script src="static/js/myscript.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+
+	
+	 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+	<script src="static/js/googlemap.js"></script>
+  <style>
+	html
+	  {
+		  scroll-behavior: smooth;
+	  }
+      .subject{
+
+  text-align: justify;
+  text-justify: inter-word;
+
+      }
+	</style>
+	
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button> <img  src="static/main_logo.png" alt="" style="height: 35px; width: 40px; "/>
+      <a class="navbar-brand" href="#">UTA MAVS</a>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Overview <span class="sr-only">(current)</span></a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#study">Study</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#mapview">Map View</a>
+          </li>
+             <li class="nav-item">
+            <a class="nav-link" href="#result">Result</a>
+          </li>
+			<li class="nav-item">
+            <a class="nav-link" href="#cityview">Project Video</a>
+          </li>
+			
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/references" target="_blank">API Guide</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#about">About Us</a>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" >
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchbox" >
+          <button class="btn btn-danger" type="button" onclick="findString()">Search</button>
+        </form>
+      </div>
+
+        <script>
+
+            var TRange=null;
+
+function findString () {
+
+    str = document.getElementById("searchbox").value;
+    if (parseInt(navigator.appVersion)<4) return;
+ var strFound;
+ if (window.find) {
+
+  // CODE FOR BROWSERS THAT SUPPORT window.find
+
+  strFound=self.find(str);
+  if (!strFound) {
+   strFound=self.find(str,0,1);
+   while (self.find(str,0,1)) continue;
+  }
+ }
+ else if (navigator.appName.indexOf("Microsoft")!=-1) {
+
+  // EXPLORER-SPECIFIC CODE
+
+  if (TRange!=null) {
+   TRange.collapse(false);
+   strFound=TRange.findText(str);
+   if (strFound) TRange.select();
+  }
+  if (TRange==null || strFound==0) {
+   TRange=self.document.body.createTextRange();
+   strFound=TRange.findText(str);
+   if (strFound) TRange.select();
+  }
+ }
+ else if (navigator.appName=="Opera") {
+  alert ("Opera browsers not supported, sorry...")
+  return;
+ }
+ if (!strFound) alert ("String '"+str+"' not found!")
+ return;
+}
+        </script>
+
+
+  </nav>
+    <div class="container mt-2">
+      <div class="row">
+        <div class="col-12">
+          <div class="jumbotron">
+            <h1 class="text-center">Air Quality Impacts of the Covid-19 Pandemic</h1>
+            
+            <p class="text-center">A brief analysis and visualizations on the open datasets available for Air Quality during Covid-19 and the previous years.</p>
+            <img src="static/pollution.jpg" alt="" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+
+       <div class="container subject" id="study">
+           <h2>Motivation of study</h2>
+        <p align="left" class="subject" >
+        <ol>
+           <li>
+             <p>  The Covid19 times had seen lockdown implemented in many regions. The motivation of the study
+           was to see how the air quality is impacted post Covid19 times with several countries imposing strict lockdown policies.</p>
+           </li>
+            <li>
+             <p> Can this be a future strategy to implement cleaner climate ??</p>
+           </li>
+       </ol>
+        </p>
+	  </div>
+
+     <div class="container subject">
+           <h2>Method Used:</h2>
+        <p align="left" class="subject" >
+         Data visualization for temporal change in air quality indices and individual pollutants like carbon monoxide, ozone, particulate matter, sulphur dioxide,
+            nitrogen oxides have been plotted on world map. Along with it, data analysis of temporal variation in <strong>cumulative average pollutant concentration </strong>
+            through years of 2015 to 2020, has been presented.
+        </p> <br>
+          <p align="left" class="subject" >
+         We calculated the cumulative average concentartion of pollutants for each individual cities in different countries and
+              observed how they changed through 2015 to 2020. Since AQI (air quality index) is not available for all cities and
+              countries, we use the cumulative average pollutant concentration in our final data analysis. We assume atmospheric
+              conditions are constant among each countries
+              throughout the years and work with only maximum pollutants generated at each city during each day of the year.
+        </p> <br>
+        <p align="left" class="subject" >
+         First we grouped the dataset based on cities and found the mean concntration of pollutants for each cities for respective
+            countries. The we used the rating to check the number of cities with low, moderate and high average pollutant concentrations
+            and whether the number of cities falling in these crtieria increases or decreases through the years. We treat our inferences
+            based on the values observed in 2020 as post-Covid19 data and values from year 2015-2019 as pre-Covid19 data.
+        </p> <br>
+	  </div>
+
+
+
+
+<div class="container" style=" overflow: hidden;" >
+    <iframe  class="embed-responsive-item" frameborder="" class="juxtapose" width="100%" style=" height:780px; overflow: hidden;  "
+      src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=382f94c4-ebee-11ea-bf88-a15b6c7adf9a"></iframe>
+</div>
+
+    <br><br>
+	   <div class="container subject" id="result">
+           <h2>Result and Discussion</h2>
+        <p align="left" class="subject" >
+The number of cities falling within higher to moderate pollutant concentration range decreases in the year 2020 (post-Covid19 time) with respect to the previous years (pre-Covid19 time). Only 4 cities shows unhealthy conditions with higher average pollutant concentration in post Covid19 time during the year 2020 while 19 cities showed higher average pollutant concentration during the year 2019. The number of cities showing higher average pollutant concentration has decreased from year 2015 to 2020.
+</p><br>
+            <p align="left" class="subject" >
+We also observe that the maximum average pollutant concentration throughout the world observed in 2020 ( post Covid19 time) has decreased significantly with respect to 2019 with <strong>decrease% of about 52%</strong>. The cities of respective countries with higher average pollutant concentration in 2020 are <strong>Israel and India.</strong>            </p>
+ <br><p align="left" class="subject" >
+     However, the count of number of cities with low average pollutant concentration (<=51) is <strong>less </strong>in 2020 with respect to 2019. The cities of respective countries with lower average pollutant concentration in 2020 are <strong>Argentina, Algeria,Taiwan, North Macedonia and Israel.</strong>
+</p> <br>
+
+           <p align="left" class="subject" >
+     We saw that the count of number of cities showing good/healthy conditions with lower average pollutant concentration is
+               <strong>less  </strong>post Covid19 time with about <strong> 338 cities in 2020 </strong> with respect to pre Covid19 time at 2019 when the count of cities with lower pollutant concentration was <strong> 355</strong>. This may be due to other factors like atmospheric conditions,humidity, temperature etc also contributing to the pollutant concentration dust/ partculate matter formation in an area.
+</p>
+<br>
+
+	  </div>
+    <div class="container" >
+      <div class="row">
+        <div class=" col-md-6 col-12" align="left">
+         
+          <a class="btn btn-danger" href="https://github.com/upasanadhar101/AWS-Hackathon/blob/master/.github/workflows/POLLUTANT%20CI_AWS%20HACKATHON_ALL%20YEARS%202015-2020.ipynb" role="button">Read more</a>
+        </div>
+        
+      </div>
+    </div>
+    <hr>
+	  <section>
+      <h2 class="text-center" id="mapview">Map View</h2>
+		  
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+			  <p>Below map shows the live Air Quality for various locations. The data is updated for every 15 min on the map. The data is provided by <a href="https://aqicn.org/">aqicn.org</a> and the Air Quality is constantly provided by various contributions to <a href="https://aqicn.org/">aqicn.org</a> </p>
+              <div class="row">
+        <div class="col-md-12 col-12" align="left">
+         
+          <a id="button1" class="btn btn-dark btn-sm" style="color: white;" onClick="generatemap('usepa-aqi')" role="button" >AQI</a> 
+			 <a id="button2"  class="btn btn-outline-dark btn-sm" onClick="generatemap('usepa-pm25')" role="button">PM2.5</a> 
+			<a id="button3" class="btn btn-outline-dark btn-sm" onClick="generatemap('usepa-10')" role="button">PM10</a> 
+			 <a id="button4" class="btn btn-outline-dark btn-sm" onClick="generatemap('usepa-o3')" role="button">Ozone</a> 
+			 <a id="button5"  class="btn btn-outline-dark btn-sm" onClick="generatemap('usepa-no2')" role="button">Nitrogen Dioxide</a> 
+			 <a id="button6" class="btn btn-outline-dark btn-sm" onClick="generatemap('usepa-so2')"  role="button">Sulfur Dioxide</a> 
+			<a id="button7" class="btn btn-outline-dark btn-sm" onClick="generatemap('usepa-co')" role="button">Carbon Monoxide</a>
+			 <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" style="max-width: 150px;">
+        <option selected>2020</option>
+       <!-- 
+        <option value="2019">2019</option>
+        <option value="2018">2018</option>
+		<option value="2017">2017</option>
+        <option value="2016">2016</option>
+        <option value="2015">2015</option> -->
+      </select> 
+			 
+			 
+        </div>
+      
+      </div>
+			  <script>
+			  function generatemap(pollutant)
+				  {
+					var selectedDropdown =  document.getElementById("inlineFormCustomSelect").value ;
+					  
+					  if(pollutant=='usepa-aqi' )
+						  {
+							if(selectedDropdown== 2020)
+							 {
+							  document.getElementById('mapdiv1').style.height="500px";
+							  document.getElementById('mapdiv1').style.opacity="1";
+							  
+							  
+							  var mapsArray = [2,3,4,5,6,7]  
+							  for(i=0;i<mapsArray.length;i++)
+								  {
+									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
+							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
+								  }
+						  
+							 }
+							 else{
+							      initGMap(selectedDropdown, pollutant);
+                            }
+						  }
+					  if(pollutant=='usepa-pm25')
+						  {
+						if(selectedDropdown== 2020)
+							 {	  
+							   
+							  document.getElementById('mapdiv2').style.height="500px";
+							  document.getElementById('mapdiv2').style.opacity="1";
+							  
+							var mapsArray = [1,3,4,5,6,7]  
+							  for(i=0;i<mapsArray.length;i++)
+								  {
+									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
+							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
+								  }
+							    
+						  }
+
+							 else{
+							      initGMap(selectedDropdown, pollutant);
+                            }
+						  }
+					    if(pollutant=='usepa-10')
+						  {
+							  
+							if(selectedDropdown== 2020)
+							 {  
+							  document.getElementById('mapdiv3').style.height="500px";
+							  document.getElementById('mapdiv3').style.opacity="1";
+							  
+							  
+							  var mapsArray = [2,1,4,5,6,7]  
+							  for(i=0;i<mapsArray.length;i++)
+								  {
+									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
+							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
+								  }
+						  }
+
+							 else{
+							      initGMap(selectedDropdown, pollutant);
+                            }
+						  }
+					  if(pollutant=='usepa-o3')
+						  {
+							  
+							if(selectedDropdown== 2020)
+							 {  
+							  document.getElementById('mapdiv4').style.height="500px";
+							  document.getElementById('mapdiv4').style.opacity="1";
+							  
+							var mapsArray = [1,3,2,5,6,7]  
+							  for(i=0;i<mapsArray.length;i++)
+								  {
+									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
+							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
+								  }
+							    
+						  }
+
+							 else{
+							      initGMap(selectedDropdown, pollutant);
+                            }
+						  }
+					    if(pollutant=='usepa-no2')
+						  {
+							  
+							if(selectedDropdown== 2020)
+							 {  
+							  document.getElementById('mapdiv5').style.height="500px";
+							  document.getElementById('mapdiv5').style.opacity="1";
+							  
+							var mapsArray = [1,3,4,2,6,7]  
+							  for(i=0;i<mapsArray.length;i++)
+								  {
+									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
+							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
+								  }
+							 }
+
+
+							 else{
+							      initGMap(selectedDropdown, pollutant);
+                            }
+						  }
+					    if(pollutant=='usepa-so2')
+						  {
+							if(selectedDropdown== 2020)
+							 {  
+							  
+							  document.getElementById('mapdiv6').style.height="500px";
+							  document.getElementById('mapdiv6').style.opacity="1";
+							  
+							  
+							  var mapsArray = [2,1,4,5,3,7]  
+							  for(i=0;i<mapsArray.length;i++)
+								  {
+									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
+							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
+								  }
+						  }
+
+
+							 else{
+							      initGMap(selectedDropdown, pollutant);
+                            }
+						  }
+					  if(pollutant=='usepa-co')
+						  {
+							if(selectedDropdown== 2020)
+							 {  
+							  
+							  document.getElementById('mapdiv7').style.height="500px";
+							  document.getElementById('mapdiv7').style.opacity="1";
+							  
+							var mapsArray = [1,3,2,5,6,4]  
+							  for(i=0;i<mapsArray.length;i++)
+								  {
+									 document.getElementById('mapdiv'+mapsArray[i]).style.height="0px";
+							  document.getElementById('mapdiv'+mapsArray[i]).style.opacity="0";
+								  }
+							    
+						  }
+							 else{
+							      initGMap(selectedDropdown, pollutant);
+                            }
+
+						  }
+				  }
+			 
+			  
+				 
+			  </script>
+			  <script>
+				  $(document).ready(function(){
+  $("[id^=button]").click(function(){
+	  
+	  
+	  for(i=1;i<8;i++)
+		  {
+			  $("#button"+i).removeClass("btn-dark");
+			  $("#button"+i).addClass("btn-outline-dark");
+   $("#button"+i).css( "color", "black" );  
+		  }
+	  $(this).addClass("btn-dark");
+   $( this ).css( "color", "white" );
+	  
+  });
+});
+			  </script>
+			  
+			  
+			  <div id="mapdiv1"  class="embed-responsive embed-responsive-16by9">
+              
+				<div  id="map1"  style="height:500px;" class="embed-responsive-item"></div> </div> 
+			  <div id="mapdiv2" class="embed-responsive embed-responsive-16by9" style="height: 0px; opacity: 0">
+				  <div  id="map2"  style="height:500px; " class="embed-responsive-item"></div> </div> 
+			   <div id="mapdiv3" class="embed-responsive embed-responsive-16by9"  style="height: 0px; opacity: 0">
+              
+				<div  id="map3"  style="height:500px;" class="embed-responsive-item"></div> </div> 
+			  <div id="mapdiv4" class="embed-responsive embed-responsive-16by9"  style="height: 0px; opacity: 0">
+				  <div  id="map4"  style="height:500px;" class="embed-responsive-item"></div> </div>  
+			  <div id="mapdiv5" class="embed-responsive embed-responsive-16by9"  style="height: 0px; opacity: 0">
+              
+				<div  id="map5"  style="height:500px;" class="embed-responsive-item"></div> </div> 
+			  <div id="mapdiv6" class="embed-responsive embed-responsive-16by9"  style="height: 0px; opacity: 0">
+              
+				<div  id="map6"  style="height:500px;" class="embed-responsive-item"></div> </div>  
+			  <div id="mapdiv7" class="embed-responsive embed-responsive-16by9"  style="height: 0px; opacity: 0">
+              
+				<div  id="map7"  style="height:500px;" class="embed-responsive-item"></div> </div> 
+			   
+			  <div id="mapdiv8" class="embed-responsive embed-responsive-16by9"  style="height: 0px; opacity: 0">
+              
+				<div  id="map8"  style="height:500px;" class="embed-responsive-item"></div>
+			   <div id="content"> dfgh</div>
+			  </div>
+			  
+<link  rel="stylesheet"  href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"  />  
+<script  src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>  
+  
+<script>  
+	for(var i =1;i<8;i++){
+		var pollutants = ['usepa-aqi','usepa-pm25','asean-pm10','usepa-o3','usepa-no2','usepa-so2','usepa-co'];
+      var  OSM_URL  =  'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';  
+      var  OSM_ATTRIB  =  '';  
+      var  osmLayer  =  L.tileLayer(OSM_URL,  {attribution:  OSM_ATTRIB});  
+  
+      var  WAQI_URL    =  "https://tiles.waqi.info/tiles/"+pollutants[i-1]+"/{z}/{x}/{y}.png?token=262c62cae45cf502f875d993afc36fa53b5b8c86";  
+      var  WAQI_ATTR  =  '';  
+      var  waqiLayer  =  L.tileLayer(WAQI_URL,  {attribution:  WAQI_ATTR});  
+  	  var mapid = 'map'+i;
+      var  lmap  =  L.map(mapid).setView([40.7128, -74.0060],  8);  
+      lmap.addLayer(osmLayer).addLayer(waqiLayer); }  
+</script> 
+	 
+			  
+          </div>
+			
+        </div>
+      </div>
+	  </section>
+    <hr>
+    <section id="cityview">
+      <h2 class="text-center">Project Video</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+              <p> Video Demonstration of what is the project about, what datasets we used, how the application is built and which services
+                  we are utilising provided by AWS.
+              <!--  This graph shows the projection of emission of a pollutant over the course of years. Select the city and the pollutant,
+                  the graph will be generated. Data is obtained from waqi.info as part of a free use. Front end is built from d3.js
+             -->  </p>
+            <div class="embed-responsive embed-responsive-16by9">
+               <iframe class="embed-responsive-item"  src="https://www.youtube.com/embed/g9clrXpcVJA"
+                       frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+             <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="https://aqicn.org/rankings/"></iframe>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">World Rankings</h5>
+              <p class="card-text">Top Countries with the worst air pollution index</p>
+              <a href="https://aqicn.org/rankings/"  target="_blank" class="btn btn-primary">Visit Website</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+               <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://aqicn.org/"></iframe>
+               </div>
+           <div class="card-body">
+              <h5 class="card-title">Live Location</h5>
+               <p class="card-text">The live AQI data provided by aqicn API, view the full map projection at <a href="waqi.info" target="_blank">waqi.info </a></p>
+              <a href="https://aqicn.org/" target="_blank" class="btn btn-primary">Show Full site</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="container subject" id="conclusion">
+           <h2>Conclusion</h2>
+        <p align="left" class="subject" >
+From the lower number of cities showing higher pollutant concentration in post covid time in the year 2020,
+            we infer that the average pollutant concentration lowered during post-covid time over certain cities
+            due to lockdown and consecutively less traffic. However, since other factors like atmospheric conditions,
+            dust formation etc. in an area also contributes to pollutant concentration, the count of number of cities
+            showing good/healthy conditions with <strong>lower average pollutant concentration is less at 2020 </strong> in post covid
+            time with respect to pre covid time at 2019 when the count was higher. Also, certain cities like <strong>Delhi</strong> in
+            India shows approximately the same pollutant concentration throughput and there is not much change in post
+            covid times. The lockdown does help in lowering traffic in certain regions
+            and corresponding lowering of certain regional pollutant concentrations but other factors play a role in the
+            air quality as well.
+        </p>
+        <p align="left" class="subject">
+            <strong>Limitation of this study:- </strong> The number of data points collected for each cities vary through years and the cumulative average
+            is based on the data available.
+            This results in some biases when we are comparing the average concentrations among cities.
+
+
+        </p>
+
+
+	  </div>
+    <hr>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-6 mb-md-0 mb-2">
+          <h2>Contact Us</h2>
+          <address>
+            <strong>UTA MAVS, ENGINEERING RESEARCH</strong><br>
+            UTA BLVD <br>
+            TX, 76010, US<br>
+            <abbr title="Phone">P:</abbr> (469) 920-0738
+          </address>
+          <h4>Social</h4>
+          <div class="row">
+            <div class="col-2"> <a href="https://github.com/kyathamomkar/AWSHackathon" target="_blank"> <img class="rounded-circle" src="static/github.png" alt=""></a></div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-12">
+          <h2>Observations</h2>
+          <ul class="list-unstyled">
+            <li class="media">
+              <img class="mr-3" style="max-height: 50px; max-width: 50px; filter: sepia(100%);" src="static/airlogo.png" alt="Generic placeholder image">
+              <div class="media-body">
+                <h5 class="mt-0 mb-1">High Impact</h5>
+                <p class="mb-0">The city <strong>Ashkelon, IL </strong> has the most unhealthy situation in its air Quality since the Covid19 lockdown. It's AQI is <strong>238.380556</strong>.</p>
+              </div>
+            </li>
+            <li class="media my-4">
+              <img class="mr-3"  style="max-height: 50px; max-width: 50px; "  src="static/airlogo.png" alt="Generic placeholder image">
+              <div class="media-body">
+                <h5 class="mt-0 mb-1">Low Impact</h5>
+                  <p class="mb-0">The city <strong>Petaẖ Tiqwa, IL </strong>    has seen a lowest value in its air Quality since the Covid19 lockdown. It's AQI is <strong> 50.229129</strong>.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-4 col-12">
+          <h2 id="about">About Us</h2>
+            <p> <a href="https://github.com/kyathamomkar" target="_blank">Omkar Kyatham </a> - Web Development
+			  	<pre>    pursuing Master's Degree in CS, UTA.</pre>
+			 <a href="http://github.com/upasanadhar101" target="_blank"> Upasana Dhar</a> - Data Analysis and modelling
+				<pre>    pursuing PhD in Environmental Sciences,
+                    UTA.</pre>
+ 			<a href="https://www.linkedin.com/in/nisarg-pawar-b29044118/" target="_blank"> Nisarg Pawar  </a> - Web Development
+			  	<pre>    pursuing Master's Degree in CS, UTA.</pre>
+			 <a href="https://www.linkedin.com/in/pragnyashreemaitreyee/" target="_blank">Pragnyashree Maitreyee  </a>- Web Development
+				<pre>    pursuing Master's Degree in CS, UTA.</pre>
+            <a href="https://www.linkedin.com/in/siddhinair08/" target="_blank"> Siddhi Nair </a> - Web Development
+				<pre>    pursuing Master's Degree in CS, UTA.</pre>
+			</p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <footer class="text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+          <p>Copyright © UTAMAVS 2020. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="static/js/jquery-3.4.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="static/js/popper.min.js"></script>
+    <script src="static/js/bootstrap-4.4.1.js"></script>
+	<script>
+setTimeout(function(){
+  console.clear()
+  //logic
+},10000);
+	</script>
+  </body>
+</html>
